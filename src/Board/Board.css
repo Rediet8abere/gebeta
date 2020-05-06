@@ -12,23 +12,8 @@
   align-items: center;
 }
 
-
 .board-row2 {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.row1-bank {
-  display: flex;
-  justify-content: center;
-  height: 2px;
-  width: 5%;
-}
-
-.row2-bank {
-  display: flex;
-  justify-content: center;
-  height: 2px;
-  width: 5%;
 }

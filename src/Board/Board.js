@@ -88,7 +88,7 @@ class Board extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      holes: Array(15).fill(null),
+      holes: Array(15).fill(0),
       marbles_per_hole: 4,
       hand: 48,
       playerIsNext: true,
@@ -177,29 +177,24 @@ class Board extends React.Component {
     //   }
     //
     // }
-
-    var j;
+    console.log("this state: ", this.state);
     // loop through players
-    for (j = 0; j < players.length; j++) {
+    for (let j = 0; j < players.length; j++) {
       // loop through their hole
-      var k;
       console.log("player: ", players[j], "holes[players[j]]: ", holes[players[j]]);
-      for (k=0; k < holes[players[j]].length; k++) {
+      for (let k=0; k < holes[players[j]].length; k++) {
         // drop marbles
         this.drop(k, this.state.marbles_per_hole)
         console.log("marbles on hand after dropping: ", this.state.hand);
-        break
+        // break
       }
     }
+
+    console.log("this state *****: ", this.state);
   }
   // take marbles from hole i
   scoop(i){
     // self.board[hand] += self.board[hole]
-    console.log("inside of scoop");
-    // console.log("stated hole at: ", i);
-    // console.log(this.state.holes[i]);
-    // console.log(" state hand: ");
-    // console.log(this.state.hand);
     this.setState({ hand: this.state.hand + this.state.holes[i] })
 
     // self.board[hole] = 0
@@ -208,17 +203,11 @@ class Board extends React.Component {
 
   // drop count many marbles in hole i
   drop(i, count) {
-    console.log("In drop");
-    console.log("hand state before: ");
-    console.log("before: ", this.state.hand);
-    console.log("count: ", count);
-    console.log("sub: ", this.state.hand - count);
-    // self.board[hand] -= count
-    this.setState({ hand: this.state.hand - count })
-    // self.board[hole] += count
-    // this.setState({ holes: this.state.holes[i] + count })
-    console.log("hand state after: ");
-    console.log("after: ", this.state.hand);
+    const holes_copy = [ ...this.state.holes]
+    console.log("before", holes_copy);
+    holes_copy[i] += count
+    console.log("modified: ", holes_copy);
+    this.setState({ holes: holes_copy, hand: this.state.hand - count })
   }
 }
 
