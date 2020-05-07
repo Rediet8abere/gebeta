@@ -154,9 +154,17 @@ class Board extends React.Component {
   }
 
   reset_board() {
+
+    // for hole in all_holes: # for hole in the holes including bank holes
+    //         if self.board[hole]: # check if there is/are marble/marbles in specific hole
+    //             self._scoop(hole) # get the marble/marbles at the specific hole
+
+    for (let k = 0; k < all_holes.length; k+= 1) {
+      console.log(this.state.holes[k], k, this.state.holes, this.holes_copy[k]);
+    }
+
     for (let j = 0; j < players.length; j += 1) {
       for (let k = 0; k < holes[players[j]].length; k += 1) {
-        // holes_copy[holes[players[j]][k]] += this.state.marbles_per_hole
         this.drop(holes[players[j]][k], this.state.marbles_per_hole)
       }
     }
@@ -168,6 +176,11 @@ class Board extends React.Component {
   drop = (i, count) => {
     this.holes_copy[i] += count
     this.hand_keeper -= count
+  }
+
+  scoop = (i) => {
+    // self.board[hand] += self.board[hole]
+    // self.board[hole] = 0
   }
 
 }
