@@ -92,26 +92,15 @@ class Board extends React.Component {
       marbles_per_hole: 4,
       hand: 48,
       playerIsNext: true,
+      isDropping: false,
     };
+
+    this.holes_copy = [ ...this.state.holes]
+    this.hand_keeper = 0
     this.reset_board = this.reset_board.bind(this);
 
   }
 
-  // handleClick(i) {
-  //   const holes = this.state.holes.slice();
-  //   if (calculateWinner(holes) || holes[i]) {
-  //     return;
-  //   }
-  //   holes[i] = this.state.xIsNext ? 'X' : 'O';
-  //   this.setState({
-  //     holes: holes,
-  //     xIsNext: !this.state.xIsNext,
-  //   });
-  // }
-
-  // def _drop(self, hole, count): #drop 4 marbles for each hole in the board
-  //       self.board[hand] -= count
-  //       self.board[hole] += count
 
   renderHole(i) {
     return (
@@ -125,16 +114,12 @@ class Board extends React.Component {
     );
   }
 
-  start() {
-    this.reset_board()
-  }
-
   render() {
     return (
       <div className="gebeta-board">
 
         <div className="status"></div>
-        <button onClick={(e) => { this.start() }}>Start Game</button>
+        <button onClick={this.start}>Start Game</button>
 
         <div className="board-row2">
         {this.renderBank(14)}
@@ -160,55 +145,31 @@ class Board extends React.Component {
       </div>
     );
   }
-//   hello = () => {
-//   return "Hello World!";
-// }
 
+  start = () => {
 
+    if (this.state.hand !== 0) {
+      this.reset_board()
+    }
+  }
 
   reset_board() {
-    // var i;
-    // // loop through all holes
-    // for (i = 0; i < all_holes.length; i++) {
-    //   // check if there is marble at hole i
-    //   if (this.state.holes[i] !== null || this.state.holes[i] !== 0) {
-    //     // scoop marbles from hole i
-    //     this.scoop(i)
-    //   }
-    //
-    // }
-    console.log("this state: ", this.state);
-    // loop through players
-    for (let j = 0; j < players.length; j++) {
-      // loop through their hole
-      console.log("player: ", players[j], "holes[players[j]]: ", holes[players[j]]);
-      for (let k=0; k < holes[players[j]].length; k++) {
-        // drop marbles
-        this.drop(k, this.state.marbles_per_hole)
-        console.log("marbles on hand after dropping: ", this.state.hand);
-        // break
+    for (let j = 0; j < players.length; j += 1) {
+      for (let k = 0; k < holes[players[j]].length; k += 1) {
+        // holes_copy[holes[players[j]][k]] += this.state.marbles_per_hole
+        this.drop(holes[players[j]][k], this.state.marbles_per_hole)
       }
     }
+    this.setState({ holes: this.holes_copy, hand: this.state.hand += this.hand_keeper })
 
-    console.log("this state *****: ", this.state);
-  }
-  // take marbles from hole i
-  scoop(i){
-    // self.board[hand] += self.board[hole]
-    this.setState({ hand: this.state.hand + this.state.holes[i] })
-
-    // self.board[hole] = 0
-    // this.setState({ holes: this.state.holes[i]  })
   }
 
-  // drop count many marbles in hole i
-  drop(i, count) {
-    const holes_copy = [ ...this.state.holes]
-    console.log("before", holes_copy);
-    holes_copy[i] += count
-    console.log("modified: ", holes_copy);
-    this.setState({ holes: holes_copy, hand: this.state.hand - count })
+
+  drop = (i, count) => {
+    this.holes_copy[i] += count
+    this.hand_keeper -= count
   }
+
 }
 
 
