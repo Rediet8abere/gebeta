@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/gebeta/static/css/main.fee6290b.chunk.css",
+    "main.js": "/gebeta/static/js/main.b9806bc2.chunk.js",
+    "main.js.map": "/gebeta/static/js/main.b9806bc2.chunk.js.map",
+    "runtime-main.js": "/gebeta/static/js/runtime-main.5d34c23a.js",
+    "runtime-main.js.map": "/gebeta/static/js/runtime-main.5d34c23a.js.map",
+    "static/js/2.66a82492.chunk.js": "/gebeta/static/js/2.66a82492.chunk.js",
+    "static/js/2.66a82492.chunk.js.map": "/gebeta/static/js/2.66a82492.chunk.js.map",
+    "index.html": "/gebeta/index.html",
+    "precache-manifest.d0414f39fb2d1832c10bd895cc37925f.js": "/gebeta/precache-manifest.d0414f39fb2d1832c10bd895cc37925f.js",
+    "service-worker.js": "/gebeta/service-worker.js",
+    "static/css/main.fee6290b.chunk.css.map": "/gebeta/static/css/main.fee6290b.chunk.css.map",
+    "static/js/2.66a82492.chunk.js.LICENSE.txt": "/gebeta/static/js/2.66a82492.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.5d34c23a.js",
+    "static/js/2.66a82492.chunk.js",
+    "static/css/main.fee6290b.chunk.css",
+    "static/js/main.b9806bc2.chunk.js"
+  ]
+}
