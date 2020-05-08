@@ -34,7 +34,7 @@ const h = {
       10: { "owner" : 1, "next" : { 0 : 11, 1 : 11}, role : "hole", "oop": 4, "distobank":  { 0: 10, 1: 4}},
       11: { "owner" : 1, "next" : { 0 : 12, 1 : 12}, role : "hole", "oop": 3, "distobank":  { 0: 9, 1: 3}},
       12: { "owner" : 1, "next" : { 0 : 13, 1 : 13}, role : "hole", "oop": 2, "distobank":  { 0: 8, 1: 2}},
-      13: { "owner" : 1, "next" : { 0 : 1, 1 : 14}, role : "hole", "oop": 1, "distobank":  { 0: 7, 1: 1}},
+      13: { "owner" : 1, "next" : { 0 : 14, 1 : 14}, role : "hole", "oop": 1, "distobank":  { 0: 7, 1: 1}},
       14: { "owner" : 1, "next" : { 0 : 1, 1 : 1}, role : "bank", "oop": null, "distobank": null }
 }
 
@@ -55,7 +55,7 @@ function Bank(props) {
   return (
     <div>
       <h5>{props.index}</h5>
-      <button style={bankStyle} className="bank" onClick={props.handleClick.bind(this, props.index)}>{props.marbles}</button>
+      <button style={bankStyle} className="bank">{props.marbles}</button>
     </div>
   );
 }
@@ -117,9 +117,7 @@ class Board extends React.Component {
 
   renderBank(i) {
     return (
-      <Bank index={i} marbles={this.state.holes[i]} handleClick={ () => {
-        this.handleClick(i)
-      }}/>
+      <Bank index={i} marbles={this.state.holes[i]} />
     );
   }
 
@@ -235,9 +233,10 @@ class Board extends React.Component {
     let hand_count = this.hand_keeper
     for (let k = 0; k < hand_count; k += 1) {
       const next_hole = h[cur_hole]["next"][this.turn]
+      console.log("next_hole");
+      console.log(next_hole);
       this.drop(next_hole, 1)
       cur_hole = next_hole
-
     }
 
     if (this.state.holes[cur_hole] === 1 && (cur_hole !== (banks[player] || banks[ai]))) {
@@ -280,6 +279,7 @@ class Board extends React.Component {
   }
 
   drop = (i, count) => {
+    console.log("dropping at: ", i);
     this.holes_copy[i] += count
     this.hand_keeper -= count
   }
