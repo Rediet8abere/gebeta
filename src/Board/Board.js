@@ -63,25 +63,20 @@ function Bank(props) {
 function Hole(props) {
   if (props.index <= 6) {
     return (
-
       <div>
       <button style={holeStyle} className="hole" onClick={props.handleClick.bind(this, props.index)}>{props.marbles}</button>
       <h5>{props.index}</h5>
       </div>
-
     );
   } else if (6 < props.index < 14) {
       return (
-
         <div>
         <h5>{props.index}</h5>
         <button style={holeStyle} className="hole" onClick={props.handleClick.bind(this, props.index)}>{props.marbles}</button>
-
         </div>
 
       );
     }
-
 }
 
 class Board extends React.Component {
@@ -100,11 +95,6 @@ class Board extends React.Component {
     this.reset_board = this.reset_board.bind(this);
 
   }
-
-  // def is_own_bank(self, last_hole):
-  //       count = self.board[last_hole] % 13 #if number of marble is > 12 they go around and land in bank itself
-  //       return count == h[last_hole]["distobank"][self.turn]
-
 
 
   renderHole(i) {
@@ -128,8 +118,11 @@ class Board extends React.Component {
         <div className="status"></div>
         <button onClick={this.start}>Start Game</button>
 
+        <div className="ai-bank">
+          {this.renderBank(14)}
+        </div>
+
         <div className="board-row2">
-        {this.renderBank(14)}
         {this.renderHole(13)}
         {this.renderHole(12)}
         {this.renderHole(11)}
@@ -145,21 +138,18 @@ class Board extends React.Component {
            {this.renderHole(4)}
            {this.renderHole(5)}
            {this.renderHole(6)}
-           {this.renderBank(7)}
          </div>
 
+         <div className="player-bank">
+          {this.renderBank(7)}
+         </div>
 
       </div>
     );
   }
 
   is_ownbank(last_hole) {
-    // console.log("last hole in", last_hole);
-    // console.log(this.state.holes);
-    // console.log(this.holes_copy);
-    // console.log("hole state ", this.state.holes[last_hole]);
     let count = this.holes_copy[last_hole] % 13
-    // console.log("count: ", count);
     return count === h[last_hole]["distobank"][this.turn]
   }
 
@@ -205,7 +195,6 @@ class Board extends React.Component {
         } else {
           completed_list.push(move_list[i])
         }
-
         this.holes_copy = [...board_copy]
       } else {
         completed_list.push(move_list[i])
@@ -217,15 +206,15 @@ class Board extends React.Component {
 
 
   start = () => {
-
     if (this.state.hand !== 0) {
       this.reset_board()
     }
     console.log("possible moves", this.possible_moves());
+    // console.log(this.is_over());
+
   }
 
   make_move_choice(i) {
-    console.log("handling: ", i);
     this.scoop(i)
     this.setState({ holes: this.holes_copy })
 
@@ -233,8 +222,6 @@ class Board extends React.Component {
     let hand_count = this.hand_keeper
     for (let k = 0; k < hand_count; k += 1) {
       const next_hole = h[cur_hole]["next"][this.turn]
-      console.log("next_hole");
-      console.log(next_hole);
       this.drop(next_hole, 1)
       cur_hole = next_hole
     }
@@ -245,15 +232,52 @@ class Board extends React.Component {
             this.scoop(cur_hole)
             this.scoop(h[cur_hole]["oop"])
             this.drop_all(banks[player])
-            console.log("hand_keeper: ", this.hand_keeper);
           }
         }
     }
   }
 
+  get_move() {
+    // let best_move = []
+    let poss_moves = this.possible_moves()
+    // let board_copy = [...this.holes_copy]
+    return poss_moves[Math.floor(Math.random() * poss_moves.length)]
+  }
+
+  play_move(moves) {
+    for (var i = 0; i < moves.length; i += 1) {
+      this.make_move_choice(moves[i])
+    }
+    if (this.turn === player) {
+      this.turn = ai
+    } else if (this.turn === ai) {
+      this.turn = player
+    }
+  }
 
   handleClick(i) {
     this.make_move_choice(i)
+    if (this.turn === player) {
+      this.turn = ai
+    } else if (this.turn === ai) {
+      this.turn = player
+    }
+  }
+
+
+  is_over() {
+    for (var i = 0; i < players.length; i += 1) {
+      let has_marbles = false
+      for (var j = 0; j < holes[player].length; j += 1) {
+        if (this.holes_copy[holes[player][j]] !== 0) {
+          has_marbles = true
+        }
+        if (has_marbles === false) {
+          return true
+        }
+      }
+    }
+    return false
   }
 
 
@@ -279,7 +303,6 @@ class Board extends React.Component {
   }
 
   drop = (i, count) => {
-    console.log("dropping at: ", i);
     this.holes_copy[i] += count
     this.hand_keeper -= count
   }
@@ -287,10 +310,16 @@ class Board extends React.Component {
   drop_all = (at_bank) => {
     this.holes_copy[at_bank] += this.hand_keeper
     this.hand_keeper = 0
-
   }
 
-
+  playing() {
+    while (!(this.is_over())) {
+      if (this.turn === ai) {
+        let move = this.get_move()
+        this.play_move(move)
+      }
+    }
+  }
 }
 
 
