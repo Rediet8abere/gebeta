@@ -8,13 +8,13 @@ const ai = 1
 const players = [player, ai]
 
 const holes = {
-      0 : [1, 2, 3, 4, 5, 6],
-      1 : [8, 9, 10, 11, 12, 13]
+  0 : [1, 2, 3, 4, 5, 6],
+  1 : [8, 9, 10, 11, 12, 13]
 }
 
 const banks = {
-      0: 7,
-      1: 14
+  0: 7,
+  1: 14
 }
 
 // const owner = 0
@@ -22,20 +22,20 @@ const banks = {
 // const role = 2
 
 const h = {
-      1: { "owner" : 0, "next" : { 0 : 2, 1 : 2}, role : "hole", "oop": 13, "distobank":  { 0: 6, 1: 12}},
-      2: { "owner" : 0, "next" : { 0 : 3, 1 : 3}, role : "hole", "oop": 12, "distobank":  { 0: 5, 1: 11}},
-      3: { "owner" : 0, "next" : { 0 : 4, 1 : 4}, role : "hole", "oop": 11, "distobank":  { 0: 4, 1: 10}},
-      4: { "owner" : 0, "next" : { 0 : 5, 1 : 5}, role : "hole", "oop": 10, "distobank":  { 0: 3, 1: 9}},
-      5: { "owner" : 0, "next" : { 0 : 6, 1 : 6}, role : "hole", "oop": 9, "distobank":  { 0: 2, 1: 8}},
-      6: { "owner" : 0, "next" : { 0 : 7, 1 : 7}, role : "hole", "oop": 8, "distobank":  { 0: 1, 1: 6}},
-      7: { "owner" : 0, "next" : { 0 : 8, 1 : 8}, role : "bank", "oop": null, "distobank": null},
-      8: { "owner" : 1, "next" : { 0 : 9, 1 : 9}, role : "hole", "oop": 6, "distobank":  { 0: 12, 1: 6}},
-      9: { "owner" : 1, "next" : { 0 : 10, 1 : 10}, role : "hole", "oop": 5, "distobank":  { 0: 11, 1: 5}},
-      10: { "owner" : 1, "next" : { 0 : 11, 1 : 11}, role : "hole", "oop": 4, "distobank":  { 0: 10, 1: 4}},
-      11: { "owner" : 1, "next" : { 0 : 12, 1 : 12}, role : "hole", "oop": 3, "distobank":  { 0: 9, 1: 3}},
-      12: { "owner" : 1, "next" : { 0 : 13, 1 : 13}, role : "hole", "oop": 2, "distobank":  { 0: 8, 1: 2}},
-      13: { "owner" : 1, "next" : { 0 : 14, 1 : 14}, role : "hole", "oop": 1, "distobank":  { 0: 7, 1: 1}},
-      14: { "owner" : 1, "next" : { 0 : 1, 1 : 1}, role : "bank", "oop": null, "distobank": null }
+  1: { "owner" : 0, "next" : { 0 : 2, 1 : 2}, role : "hole", "oop": 13, "distobank":  { 0: 6, 1: 12}},
+  2: { "owner" : 0, "next" : { 0 : 3, 1 : 3}, role : "hole", "oop": 12, "distobank":  { 0: 5, 1: 11}},
+  3: { "owner" : 0, "next" : { 0 : 4, 1 : 4}, role : "hole", "oop": 11, "distobank":  { 0: 4, 1: 10}},
+  4: { "owner" : 0, "next" : { 0 : 5, 1 : 5}, role : "hole", "oop": 10, "distobank":  { 0: 3, 1: 9}},
+  5: { "owner" : 0, "next" : { 0 : 6, 1 : 6}, role : "hole", "oop": 9, "distobank":  { 0: 2, 1: 8}},
+  6: { "owner" : 0, "next" : { 0 : 7, 1 : 7}, role : "hole", "oop": 8, "distobank":  { 0: 1, 1: 6}},
+  7: { "owner" : 0, "next" : { 0 : 8, 1 : 8}, role : "bank", "oop": null, "distobank": null},
+  8: { "owner" : 1, "next" : { 0 : 9, 1 : 9}, role : "hole", "oop": 6, "distobank":  { 0: 12, 1: 6}},
+  9: { "owner" : 1, "next" : { 0 : 10, 1 : 10}, role : "hole", "oop": 5, "distobank":  { 0: 11, 1: 5}},
+  10: { "owner" : 1, "next" : { 0 : 11, 1 : 11}, role : "hole", "oop": 4, "distobank":  { 0: 10, 1: 4}},
+  11: { "owner" : 1, "next" : { 0 : 12, 1 : 12}, role : "hole", "oop": 3, "distobank":  { 0: 9, 1: 3}},
+  12: { "owner" : 1, "next" : { 0 : 13, 1 : 13}, role : "hole", "oop": 2, "distobank":  { 0: 8, 1: 2}},
+  13: { "owner" : 1, "next" : { 0 : 14, 1 : 14}, role : "hole", "oop": 1, "distobank":  { 0: 7, 1: 1}},
+  14: { "owner" : 1, "next" : { 0 : 1, 1 : 1}, role : "bank", "oop": null, "distobank": null }
 }
 
 // do +1
@@ -122,9 +122,12 @@ class Board extends React.Component {
 
   renderHole(i) {
     return (
-      <Hole index={i} marbles={this.state.holes[i]} handleClick={ () => {
-        this.handleClick(i)
-      }}/>
+      <Hole 
+        index={i} 
+        marbles={this.state.holes[i]} 
+        handleClick={ () => {
+          this.handleClick(i)
+        }}/>
     );
   }
 
@@ -134,53 +137,32 @@ class Board extends React.Component {
     );
   }
 
-  render() {
-    return (
-      <div className="gebeta-board">
-
-        <button className="start-btn" onClick={this.start}>Start Game</button>
-        {this.renderTurn()}
-        <div className="ai-bank">
-          {this.renderBank(14)}
-        </div>
-
-        <div className="board-r1-r2">
-          <div className="board-row2">
-          {this.renderHole(13)}
-          {this.renderHole(12)}
-          {this.renderHole(11)}
-          {this.renderHole(10)}
-          {this.renderHole(9)}
-          {this.renderHole(8)}
-          </div>
-
-           <div className="board-row1">
-             {this.renderHole(1)}
-             {this.renderHole(2)}
-             {this.renderHole(3)}
-             {this.renderHole(4)}
-             {this.renderHole(5)}
-             {this.renderHole(6)}
-           </div>
-         </div>
-         <div className="player-bank">
-          {this.renderBank(7)}
-         </div>
-
-      </div>
-    );
+  is_ownbank_for(last_hole, turn) {
+    let count = this.holes_copy[last_hole] % 13
+    return count === h[last_hole]["distobank"][turn]
   }
-
 
   is_ownbank(last_hole) {
     let count = this.holes_copy[last_hole] % 13
     return count === h[last_hole]["distobank"][this.turn]
   }
 
+  // possible_moves_choice_for(this.turn)
+  // possible_moves_choice_for(ai)
+  // possible_moves_choice_for(player)
+  possible_moves_choice_for(turn) {
+    const possible = []
+    for (let k = 0; k < holes[turn].length; k += 1) {
+      if (this.holes_copy[holes[turn][k]]!== 0) {
+        possible.push(holes[turn][k])
+      }
+    }
+    return possible
+  }
 
   possible_moves_choice() {
-    let possible = []
-    for (var k = 0; k < holes[this.turn].length; k += 1) {
+    const possible = []
+    for (let k = 0; k < holes[this.turn].length; k += 1) {
       if (this.holes_copy[holes[this.turn][k]]!== 0) {
         possible.push(holes[this.turn][k])
       }
@@ -189,12 +171,12 @@ class Board extends React.Component {
   }
 
   possible_moves() {
-    let move_list = []
-    let pmc = this.possible_moves_choice()
-    for (var i = 0; i < pmc.length; i += 1 ) {
+    const move_list = []
+    const pmc = this.possible_moves_choice()
+    for (let i = 0; i < pmc.length; i += 1 ) {
       move_list.push([pmc[i]])
     }
-    let completed_list = []
+    const completed_list = []
     this.recurse_moves(move_list, completed_list)
     return completed_list
   }
@@ -227,7 +209,7 @@ class Board extends React.Component {
   }
 
   recurse_moves(move_list, completed_list) {
-    for (var i = 0; i < move_list.length; i += 1) {
+    for (let i = 0; i < move_list.length; i += 1) {
       let last_hole = move_list[i][move_list[i].length-1]
 
       if (this.is_ownbank(last_hole)) {
@@ -263,7 +245,10 @@ class Board extends React.Component {
   }
 
 
-
+  // TODO: Check if minmax is a problem by removing it and testing the game without it. 
+  // If the game works without minimax you have narrowed the scope of the problem. 
+  // TODO: Don't change the game state when checking for possible ai moves. 
+  
   minimax(move, depth, alpha, beta, maximazing_player) {
     if (depth === 0 || this.is_over()) {
       return this.score()
@@ -271,13 +256,13 @@ class Board extends React.Component {
     // console.log("move *****", move);
     if (maximazing_player === true) {
       let max_score = Number.NEGATIVE_INFINITY
-      this.play_move(move, true)
-      this.turn = player
+      this.play_move(move, true) // [[1]], true
+      this.turn = player // ????
       this.opp_turn = ai
-      let opp_moves = this.possible_moves()
-      let board_copy = [...this.holes_copy]
+      const opp_moves = this.possible_moves() // this.possible_moves(whosturn)
+      const board_copy = [...this.holes_copy]
       for (let i = 0; i < opp_moves.length; i += 1) {
-        let eval_score = this.minimax(opp_moves[i], depth-1, alpha, beta, false)
+        let eval_score = this.minimax(opp_moves[i], depth - 1, alpha, beta, false)
         this.holes_copy = [...board_copy]
         this.turn = player
         this.opp_turn = ai
@@ -296,8 +281,8 @@ class Board extends React.Component {
       this.opp_turn = player
       let ai_moves = this.possible_moves()
       let board_copy = [...this.holes_copy]
-      for (var j = 0; j < ai_moves.length; j += 1) {
-        let eval_score = this.minimax(ai_moves[j], depth-1, alpha, beta, true)
+      for (let j = 0; j < ai_moves.length; j += 1) {
+        let eval_score = this.minimax(ai_moves[j], depth - 1, alpha, beta, true)
         this.holes_copy = [...board_copy]
         this.turn = ai
         this.opp_turn = player
@@ -314,13 +299,13 @@ class Board extends React.Component {
   get_move() {
     this.isTesting = true
     let best_score = Number.NEGATIVE_INFINITY
-    let best_move = []
-    let poss_moves = this.possible_moves()
-    let board_copy = [...this.holes_copy]
+    const best_move = []
+    const poss_moves = this.possible_moves()
+    const board_copy = [...this.holes_copy]
 
-    var count = 0
+    let count = 0
 
-    for (var i = 0; i < poss_moves.length; i += 1 ) {
+    for (let i = 0; i < poss_moves.length; i += 1 ) {
       let ai_score = this.minimax(poss_moves[i], 2, Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY, true)
       this.holes_copy = [...board_copy]
       if (ai_score > best_score) {
@@ -329,7 +314,7 @@ class Board extends React.Component {
       }
 
       count += 1
-      console.log("count", count);
+      // console.log("count", count);
       if (count === 1) {
         break
       }
@@ -341,38 +326,46 @@ class Board extends React.Component {
     // return poss_moves[Math.floor(Math.random() * poss_moves.length)]
   }
 
-
+  // ai move - 
   make_move() {
     // not returning optimal move
+    console.log('ai move')
     let ai_move = this.get_move()
-    this.play_move(ai_move, true)
+    this.play_move('make_move', ai_move, true)
+    this.turn = ai
+    console.log('make_move '+this.turn)
   }
 
-  play_move(moves, done) {
-    console.log("moves, done");
-    console.log(moves, done, this.turn);
+  test_possible_move() {
+
+  }
+
+  play_move(moves, done) { // [[1]], true - turn === ai
+    console.log('play move', moves, done)
+    console.log(this.turn === ai ? 'player AI' : 'player Player')
+
     if (done) {
       for (let i = 0; i < moves.length; i += 1) {
-        this.make_move_choice(moves[i])
+        // console.log('make move choice', moves[i])
+        this.make_move_choice(moves[i]) // [1]
       }
-      // if player is done making move, give turn to AI
+      // console.log('turn === player?', this.turn, player)
       if (this.turn === player) {
+        console.log('play_move - player turn')
         this.turn = ai
         this.opp_turn = player
         setTimeout(() => {
-            this.make_move()
-            this.setState({ holes: this.holes_copy })
-          }, 3000);
+          this.make_move() // ????? 
+          this.setState({ holes: this.holes_copy })
+        }, 3000);
       }
-      console.log("reached the end of if", this.turn);
+
       if (this.turn === ai) {
         this.turn = player
         this.opp_turn = ai
       }
 
     } else { // player have another turn
-      console.log("**************************");
-      console.log(moves);
       this.make_move_choice(moves)
     }
   }
@@ -382,7 +375,7 @@ class Board extends React.Component {
     let poss_moves = this.possible_moves()
     let done = false
     this.isTesting = false
-    for (var i = 0; i < poss_moves.length; i += 1) {
+    for (let i = 0; i < poss_moves.length; i += 1) {
       if (move === poss_moves[i][0]) {
         if (poss_moves[i].length === 1) {
           done = true
@@ -440,7 +433,6 @@ class Board extends React.Component {
     }
 
     this.setState({ holes: this.holes_copy, hand: this.hand_keeper })
-
   }
 
   scoop = (i) => {
@@ -456,6 +448,45 @@ class Board extends React.Component {
   drop_all = (at_bank) => {
     this.holes_copy[at_bank] += this.hand_keeper
     this.hand_keeper = 0
+  }
+
+  render() {
+    return (
+      <div className="gebeta-board">
+
+        <button 
+          className="start-btn" 
+          onClick={this.start}>Start Game</button>
+        {this.renderTurn()}
+        <div className="ai-bank">
+          {this.renderBank(14)}
+        </div>
+
+        <div className="board-r1-r2">
+          <div className="board-row2">
+          {this.renderHole(13)}
+          {this.renderHole(12)}
+          {this.renderHole(11)}
+          {this.renderHole(10)}
+          {this.renderHole(9)}
+          {this.renderHole(8)}
+          </div>
+
+           <div className="board-row1">
+             {this.renderHole(1)}
+             {this.renderHole(2)}
+             {this.renderHole(3)}
+             {this.renderHole(4)}
+             {this.renderHole(5)}
+             {this.renderHole(6)}
+           </div>
+         </div>
+         <div className="player-bank">
+          {this.renderBank(7)}
+         </div>
+
+      </div>
+    );
   }
 
 }
