@@ -51,6 +51,14 @@ const bankStyle = {
   margin: "4px",
 }
 
+function Turn(props) {
+  return (
+    <div className="turn-keeper">
+      <h5>Turn keeper: {props.turn}</h5>
+    </div>
+  );
+}
+
 function Bank(props) {
   return (
     <div>
@@ -59,7 +67,7 @@ function Bank(props) {
     </div>
   );
 }
-// Refactor this code
+
 function Hole(props) {
   if (props.index <= 6) {
     return (
@@ -74,10 +82,12 @@ function Hole(props) {
         <h5>{props.index}</h5>
         <button style={holeStyle} className="hole" onClick={props.handleClick.bind(this, props.index)}>{props.marbles}</button>
         </div>
-
       );
     }
 }
+
+
+
 
 class Board extends React.Component {
   constructor(props) {
@@ -86,16 +96,29 @@ class Board extends React.Component {
       holes: Array(15).fill(0),
       marbles_per_hole: 4,
       hand: 48,
-      playerIsNext: true,
+      done: false,
       isDropping: false,
     };
     this.turn = player
+    this.opp_turn = ai
     this.holes_copy = [ ...this.state.holes]
     this.hand_keeper = 48
     this.reset_board = this.reset_board.bind(this);
+    this.isTesting = true
 
   }
 
+  renderTurn() {
+    let turn_keeper = "User"
+    if (this.turn === ai) {
+      turn_keeper = "AI"
+    } else {
+      turn_keeper = "User"
+    }
+    return (
+      <Turn turn={turn_keeper} />
+    );
+  }
 
   renderHole(i) {
     return (
@@ -115,31 +138,31 @@ class Board extends React.Component {
     return (
       <div className="gebeta-board">
 
-        <div className="status"></div>
-        <button onClick={this.start}>Start Game</button>
-
+        <button className="start-btn" onClick={this.start}>Start Game</button>
+        {this.renderTurn()}
         <div className="ai-bank">
           {this.renderBank(14)}
         </div>
 
-        <div className="board-row2">
-        {this.renderHole(13)}
-        {this.renderHole(12)}
-        {this.renderHole(11)}
-        {this.renderHole(10)}
-        {this.renderHole(9)}
-        {this.renderHole(8)}
-        </div>
+        <div className="board-r1-r2">
+          <div className="board-row2">
+          {this.renderHole(13)}
+          {this.renderHole(12)}
+          {this.renderHole(11)}
+          {this.renderHole(10)}
+          {this.renderHole(9)}
+          {this.renderHole(8)}
+          </div>
 
-         <div className="board-row1">
-           {this.renderHole(1)}
-           {this.renderHole(2)}
-           {this.renderHole(3)}
-           {this.renderHole(4)}
-           {this.renderHole(5)}
-           {this.renderHole(6)}
+           <div className="board-row1">
+             {this.renderHole(1)}
+             {this.renderHole(2)}
+             {this.renderHole(3)}
+             {this.renderHole(4)}
+             {this.renderHole(5)}
+             {this.renderHole(6)}
+           </div>
          </div>
-
          <div className="player-bank">
           {this.renderBank(7)}
          </div>
@@ -147,6 +170,7 @@ class Board extends React.Component {
       </div>
     );
   }
+
 
   is_ownbank(last_hole) {
     let count = this.holes_copy[last_hole] % 13
@@ -175,48 +199,8 @@ class Board extends React.Component {
     return completed_list
   }
 
-  recurse_moves(move_list, completed_list) {
-
-    for (var i = 0; i < move_list.length; i += 1) {
-      let last_hole = move_list[i][move_list[i].length-1]
-
-      if (this.is_ownbank(last_hole)) {
-        console.log();
-        let board_copy = [...this.holes_copy]
-        this.make_move_choice(last_hole)
-        let aval_holes = this.possible_moves_choice()
-
-        if (aval_holes.length !== 0) {
-          let next_visit = []
-          for (var k = 0; k < aval_holes.length; k += 1) {
-            next_visit.push(move_list[i].concat(aval_holes[k]) )
-          }
-          this.recurse_moves(next_visit, completed_list)
-        } else {
-          completed_list.push(move_list[i])
-        }
-        this.holes_copy = [...board_copy]
-      } else {
-        completed_list.push(move_list[i])
-      }
-    }
-    this.setState({ holes: this.holes_copy })
-  }
-
-
-
-  start = () => {
-    if (this.state.hand !== 0) {
-      this.reset_board()
-    }
-    console.log("possible moves", this.possible_moves());
-    // console.log(this.is_over());
-
-  }
-
   make_move_choice(i) {
     this.scoop(i)
-    this.setState({ holes: this.holes_copy })
 
     let cur_hole = i
     let hand_count = this.hand_keeper
@@ -235,32 +219,180 @@ class Board extends React.Component {
           }
         }
     }
+
+    if (!(this.isTesting)) {
+      this.setState({ holes: this.holes_copy })
+    }
+
+  }
+
+  recurse_moves(move_list, completed_list) {
+    for (var i = 0; i < move_list.length; i += 1) {
+      let last_hole = move_list[i][move_list[i].length-1]
+
+      if (this.is_ownbank(last_hole)) {
+        let board_copy = [...this.holes_copy]
+        this.make_move_choice(last_hole)
+        let aval_holes = this.possible_moves_choice()
+
+        if (aval_holes.length !== 0) {
+          let next_visit = []
+          for (var k = 0; k < aval_holes.length; k += 1) {
+            next_visit.push(move_list[i].concat(aval_holes[k]) )
+          }
+          this.recurse_moves(next_visit, completed_list)
+        } else {
+          completed_list.push(move_list[i])
+        }
+        this.holes_copy = [...board_copy]
+      } else {
+        completed_list.push(move_list[i])
+      }
+    }
+    if (this.turn === player) {
+      this.setState({ holes: this.holes_copy })
+    }
+  }
+
+
+
+  start = () => {
+    if (this.state.hand !== 0) {
+      this.reset_board()
+    }
+  }
+
+
+
+  minimax(move, depth, alpha, beta, maximazing_player) {
+    if (depth === 0 || this.is_over()) {
+      return this.score()
+    }
+    // console.log("move *****", move);
+    if (maximazing_player === true) {
+      let max_score = Number.NEGATIVE_INFINITY
+      this.play_move(move, true)
+      this.turn = player
+      this.opp_turn = ai
+      let opp_moves = this.possible_moves()
+      let board_copy = [...this.holes_copy]
+      for (let i = 0; i < opp_moves.length; i += 1) {
+        let eval_score = this.minimax(opp_moves[i], depth-1, alpha, beta, false)
+        this.holes_copy = [...board_copy]
+        this.turn = player
+        this.opp_turn = ai
+        max_score = Math.max(eval_score, max_score)
+        alpha = Math.max(alpha, eval_score)
+        if (beta <= alpha) {
+          break
+        }
+      }
+    return max_score
+
+    } else if (maximazing_player === false) {
+      let min_score = Number.POSITIVE_INFINITY
+      this.play_move(move, true)
+      this.turn = ai
+      this.opp_turn = player
+      let ai_moves = this.possible_moves()
+      let board_copy = [...this.holes_copy]
+      for (var j = 0; j < ai_moves.length; j += 1) {
+        let eval_score = this.minimax(ai_moves[j], depth-1, alpha, beta, true)
+        this.holes_copy = [...board_copy]
+        this.turn = ai
+        this.opp_turn = player
+        min_score = Math.min(min_score, eval_score)
+        beta = Math.min(beta, eval_score)
+        if (beta <= alpha) {
+          break
+        }
+      }
+      return min_score
+    }
   }
 
   get_move() {
-    // let best_move = []
+    this.isTesting = true
+    let best_score = Number.NEGATIVE_INFINITY
+    let best_move = []
     let poss_moves = this.possible_moves()
-    // let board_copy = [...this.holes_copy]
-    return poss_moves[Math.floor(Math.random() * poss_moves.length)]
+    let board_copy = [...this.holes_copy]
+
+    var count = 0
+
+    for (var i = 0; i < poss_moves.length; i += 1 ) {
+      let ai_score = this.minimax(poss_moves[i], 2, Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY, true)
+      this.holes_copy = [...board_copy]
+      if (ai_score > best_score) {
+        best_move = poss_moves[i]
+        best_score = ai_score
+      }
+
+      count += 1
+      console.log("count", count);
+      if (count === 1) {
+        break
+      }
+    }
+    this.turn = ai
+    this.opp_turn = player
+    this.isTesting = true
+    return best_move
+    // return poss_moves[Math.floor(Math.random() * poss_moves.length)]
   }
 
-  play_move(moves) {
-    for (var i = 0; i < moves.length; i += 1) {
-      this.make_move_choice(moves[i])
-    }
-    if (this.turn === player) {
-      this.turn = ai
-    } else if (this.turn === ai) {
-      this.turn = player
+
+  make_move() {
+    // not returning optimal move
+    let ai_move = this.get_move()
+    this.play_move(ai_move, true)
+  }
+
+  play_move(moves, done) {
+    console.log("moves, done");
+    console.log(moves, done, this.turn);
+    if (done) {
+      for (let i = 0; i < moves.length; i += 1) {
+        this.make_move_choice(moves[i])
+      }
+      // if player is done making move, give turn to AI
+      if (this.turn === player) {
+        this.turn = ai
+        this.opp_turn = player
+        setTimeout(() => {
+            this.make_move()
+            this.setState({ holes: this.holes_copy })
+          }, 3000);
+      }
+      console.log("reached the end of if", this.turn);
+      if (this.turn === ai) {
+        this.turn = player
+        this.opp_turn = ai
+      }
+
+    } else { // player have another turn
+      console.log("**************************");
+      console.log(moves);
+      this.make_move_choice(moves)
     }
   }
 
-  handleClick(i) {
-    this.make_move_choice(i)
-    if (this.turn === player) {
-      this.turn = ai
-    } else if (this.turn === ai) {
-      this.turn = player
+
+  handleClick(move) {
+    let poss_moves = this.possible_moves()
+    let done = false
+    this.isTesting = false
+    for (var i = 0; i < poss_moves.length; i += 1) {
+      if (move === poss_moves[i][0]) {
+        if (poss_moves[i].length === 1) {
+          done = true
+          this.play_move(poss_moves[i], done)
+        } else if (poss_moves[i].length > 1) {
+          done = false
+          this.play_move(move, done)
+          break
+        }
+      }
     }
   }
 
@@ -272,14 +404,27 @@ class Board extends React.Component {
         if (this.holes_copy[holes[player][j]] !== 0) {
           has_marbles = true
         }
-        if (has_marbles === false) {
-          return true
-        }
+      }
+      if (has_marbles === false) {
+        return true
       }
     }
     return false
   }
 
+  score(playing = null) {
+    if (playing === null) {
+      playing = this.turn
+    }
+    if (playing === ai) {
+      this.turn = ai
+      this.opp_turn = player
+    } else if (playing === player) {
+      this.turn = player
+      this.opp_turn = ai
+    }
+    return this.holes_copy[banks[this.turn]] - this.holes_copy[banks[this.opp_turn]]
+  }
 
   reset_board() {
     for (let k = 0; k < all_holes.length; k += 1) {
@@ -293,6 +438,7 @@ class Board extends React.Component {
         this.drop(holes[players[j]][k], this.state.marbles_per_hole)
       }
     }
+
     this.setState({ holes: this.holes_copy, hand: this.hand_keeper })
 
   }
@@ -312,14 +458,6 @@ class Board extends React.Component {
     this.hand_keeper = 0
   }
 
-  playing() {
-    while (!(this.is_over())) {
-      if (this.turn === ai) {
-        let move = this.get_move()
-        this.play_move(move)
-      }
-    }
-  }
 }
 
 

@@ -1,11 +1,39 @@
 
-/* .gebeta-board {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 200px;
-  border: 3px solid green;
-} */
+.turn-keeper {
+  position: absolute;
+  top: 80px;
+  left: 178px;
+  text-align: center;
+  font-size: 150%;
+}
+
+.start-btn {
+  background-color: #fc8210;
+  border: none;
+  padding: 15px 32px;
+  color: white;
+  position: absolute;
+  top: 80px;
+  left: 578px;
+  font-size: large;
+}
+
+.bank {
+  font-size: large;
+  border-radius: 12px;
+}
+
+.hole {
+  font-size: large;
+  border-radius: 50%;
+}
+
+.board-r1-r2 {
+  position: absolute;
+  left: 578px;
+  top: 250px;
+}
+
 .board-row1 {
   display: flex;
   justify-content: center;
@@ -19,13 +47,13 @@
 }
 
 .ai-bank {
-  position: relative;
+  position: absolute;
   left: 460px;
-  top: 180px;
+  top: 250px;
 }
 
 .player-bank {
-  position: relative;
-  left: 860px;
-  top: -230px;
+  position: absolute;
+  left: 880px;
+  top: 250px;
 }
