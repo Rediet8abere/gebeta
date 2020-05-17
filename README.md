@@ -1,2 +1,2 @@
 # Mancala
-![Awale Mancala](public/images/AwaleMancala.jpg = 250x250)
+<img src="public/images/AwaleMancala.jpg" width="200" height="400" />
