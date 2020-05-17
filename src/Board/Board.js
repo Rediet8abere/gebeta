@@ -1,4 +1,3 @@
-
 import React from 'react';
 import './Board.css'
 
@@ -21,13 +20,16 @@ const banks = {
 // var next = 1;
 // const role = 2
 
+// To Do: Let user know when user captures and when AI captures
+//        Let user know if they have another round
+
 const h = {
-      1: { "owner" : 0, "next" : { 0 : 2, 1 : 2}, role : "hole", "oop": 13, "distobank":  { 0: 6, 1: 12}},
-      2: { "owner" : 0, "next" : { 0 : 3, 1 : 3}, role : "hole", "oop": 12, "distobank":  { 0: 5, 1: 11}},
-      3: { "owner" : 0, "next" : { 0 : 4, 1 : 4}, role : "hole", "oop": 11, "distobank":  { 0: 4, 1: 10}},
-      4: { "owner" : 0, "next" : { 0 : 5, 1 : 5}, role : "hole", "oop": 10, "distobank":  { 0: 3, 1: 9}},
-      5: { "owner" : 0, "next" : { 0 : 6, 1 : 6}, role : "hole", "oop": 9, "distobank":  { 0: 2, 1: 8}},
-      6: { "owner" : 0, "next" : { 0 : 7, 1 : 7}, role : "hole", "oop": 8, "distobank":  { 0: 1, 1: 6}},
+      1: { "owner" : 0, "next" : { 0 : 2, 1 : 2}, role : "hole", "oop": 13, "distobank":  { 0: 6, 1: 13}},
+      2: { "owner" : 0, "next" : { 0 : 3, 1 : 3}, role : "hole", "oop": 12, "distobank":  { 0: 5, 1: 12}},
+      3: { "owner" : 0, "next" : { 0 : 4, 1 : 4}, role : "hole", "oop": 11, "distobank":  { 0: 4, 1: 11}},
+      4: { "owner" : 0, "next" : { 0 : 5, 1 : 5}, role : "hole", "oop": 10, "distobank":  { 0: 3, 1: 10}},
+      5: { "owner" : 0, "next" : { 0 : 6, 1 : 6}, role : "hole", "oop": 9, "distobank":  { 0: 2, 1: 9}},
+      6: { "owner" : 0, "next" : { 0 : 7, 1 : 7}, role : "hole", "oop": 8, "distobank":  { 0: 1, 1: 8}},
       7: { "owner" : 0, "next" : { 0 : 8, 1 : 8}, role : "bank", "oop": null, "distobank": null},
       8: { "owner" : 1, "next" : { 0 : 9, 1 : 9}, role : "hole", "oop": 6, "distobank":  { 0: 12, 1: 6}},
       9: { "owner" : 1, "next" : { 0 : 10, 1 : 10}, role : "hole", "oop": 5, "distobank":  { 0: 11, 1: 5}},
@@ -101,7 +103,10 @@ class Board extends React.Component {
     };
     this.turn = player
     this.opp_turn = ai
-    this.holes_copy = [ ...this.state.holes]
+    this.holes_copy = JSON.parse(JSON.stringify(this.state.holes))
+    // [...this.state.holes]
+    // .slice(0)
+
     this.hand_keeper = 48
     this.reset_board = this.reset_board.bind(this);
     this.isTesting = true
@@ -189,51 +194,117 @@ class Board extends React.Component {
   }
 
   possible_moves() {
+    // console.log("\n");
+    // console.log( (this.turn === player) ? "player's turn" : "ai's turn" );
+    // console.log("****************************");
+    // console.log("holes_copy");
+    // console.log(this.holes_copy);
+    // console.log("holes state");
+    // console.log(this.state.holes);
+    // console.log("*****************************");
+    // console.log("\n");
+
     let move_list = []
     let pmc = this.possible_moves_choice()
     for (var i = 0; i < pmc.length; i += 1 ) {
       move_list.push([pmc[i]])
     }
+
     let completed_list = []
     this.recurse_moves(move_list, completed_list)
     return completed_list
+
   }
 
   make_move_choice(i) {
+    // console.log("hand_keeper before scoop should be 0: ", this.hand_keeper);
+    // console.log("cur_hole: ", i);
     this.scoop(i)
+    // console.log("-----------make move choice-----------------");
+    // console.log("this.state.holes");
+    // console.log(this.state.holes);
+    // console.log("holes_copy");
+    // console.log(this.holes_copy);
+    // console.log("-----------make move choice-----------------");
 
     let cur_hole = i
     let hand_count = this.hand_keeper
+    // console.log("hand_keeper after scoop should be 4: ", this.hand_keeper);
+    // let count = 0
+    // console.log("\n");
     for (let k = 0; k < hand_count; k += 1) {
-      const next_hole = h[cur_hole]["next"][this.turn]
+      let next_hole = h[cur_hole]["next"][this.turn]
+      // console.log("next_hole and bank check");
+      // console.log(next_hole === banks[ai], "next_hole: ", next_hole, "banks[ai]", banks[ai]);
+      // console.log(this.turn === player ? "player's turn" : "ai's turn");
+      // if it's opponent's bank don't drop skip and drop on next hole
+      if (this.turn === player && next_hole === banks[ai]) {
+        // console.log("prevents from dopping in opponent hole ai");
+        next_hole = h[next_hole]["next"][this.turn]
+        // console.log("whats next to a bank", next_hole);
+      } else if (this.turn === ai && next_hole === banks[player]) {
+        // console.log("prevents from dopping in opponent hole bank");
+        next_hole = h[next_hole]["next"][this.turn]
+      }
+      // console.log("next_hole", next_hole);
       this.drop(next_hole, 1)
       cur_hole = next_hole
+      // count += 1
     }
+    // console.log("\n");
+    // console.log("cur_hole should be : ", cur_hole, "count should be ", count);
+    //
+    //
+    // console.log("holes_copy");
+    // console.log(this.holes_copy);
+    // console.log("holes state");
+    // console.log(this.state.holes);
+    //
+    // console.log( (cur_hole !== banks[player] && cur_hole !== banks[ai]) ? "cur hole not bank" : "It's a bank" );
+    //
+    // console.log("this.holes_copy[cur_hole] ", this.holes_copy[cur_hole] );
+    // console.log("marbles in cur_hole === 1", this.holes_copy[cur_hole] === 1);
+    // console.log(this.turn=== player ? "player's turn" : "ai's turn");
 
-    if (this.state.holes[cur_hole] === 1 && (cur_hole !== (banks[player] || banks[ai]))) {
-        if (h[cur_hole]["owner"] === this.turn ) {
+    if (h[cur_hole]["owner"] === this.turn ) {
+      if (this.holes_copy[cur_hole] === 1 && (cur_hole !== banks[player] && cur_hole !== banks[ai])) {
           if (h[cur_hole]["oop"] !== 0) {
+            // console.log("\n");
+            // console.log("))))))))))))))))))))) --- scooping");
+            // console.log("cur_hole: ", cur_hole, this.holes_copy[cur_hole]);
+            // console.log("opp holes: ", h[cur_hole]["oop"], this.holes_copy[h[cur_hole]["oop"]]);
+            // console.log("\n");
             this.scoop(cur_hole)
             this.scoop(h[cur_hole]["oop"])
-            this.drop_all(banks[player])
+            this.drop_all(banks[this.turn])
           }
         }
     }
-
+    // console.log("**************make_move_choice****************");
+    // console.log("this.state.holes");
+    // console.log(this.state.holes);
+    // console.log("holes_copy");
+    // console.log(this.holes_copy);
+    // console.log("**************make_move_choice****************");
+    // console.log("testing should be true if turn is ai", this.isTesting, this.turn === ai);
     if (!(this.isTesting)) {
-      this.setState({ holes: this.holes_copy })
+      this.setState({
+        holes: JSON.parse(JSON.stringify(this.holes_copy))
+      })
     }
 
   }
 
   recurse_moves(move_list, completed_list) {
+
     for (var i = 0; i < move_list.length; i += 1) {
       let last_hole = move_list[i][move_list[i].length-1]
 
       if (this.is_ownbank(last_hole)) {
-        let board_copy = [...this.holes_copy]
+        const board_copy = JSON.parse(JSON.stringify(this.holes_copy))
         this.make_move_choice(last_hole)
-        let aval_holes = this.possible_moves_choice()
+
+        const aval_holes = this.possible_moves_choice()
 
         if (aval_holes.length !== 0) {
           let next_visit = []
@@ -244,14 +315,15 @@ class Board extends React.Component {
         } else {
           completed_list.push(move_list[i])
         }
-        this.holes_copy = [...board_copy]
+        this.holes_copy = JSON.parse(JSON.stringify(board_copy))
+        // this.setState({ holes: this.holes_copy })
       } else {
         completed_list.push(move_list[i])
       }
     }
-    if (this.turn === player) {
-      this.setState({ holes: this.holes_copy })
-    }
+    // if (this.turn === player) {
+    //   this.setState({ holes: this.holes_copy })
+    // }
   }
 
 
@@ -264,122 +336,126 @@ class Board extends React.Component {
 
 
 
-  minimax(move, depth, alpha, beta, maximazing_player) {
+  minimax(move, depth, maximazing_player) {
     if (depth === 0 || this.is_over()) {
       return this.score()
     }
-    // console.log("move *****", move);
+
     if (maximazing_player === true) {
       let max_score = Number.NEGATIVE_INFINITY
       this.play_move(move, true)
-      this.turn = player
-      this.opp_turn = ai
-      let opp_moves = this.possible_moves()
-      let board_copy = [...this.holes_copy]
+      const opp_moves = this.possible_moves()
+      const board_copy = JSON.parse(JSON.stringify(this.holes_copy))
       for (let i = 0; i < opp_moves.length; i += 1) {
-        let eval_score = this.minimax(opp_moves[i], depth-1, alpha, beta, false)
-        this.holes_copy = [...board_copy]
+        let eval_score = this.minimax(opp_moves[i], depth-1, false)
+        this.holes_copy = JSON.parse(JSON.stringify(board_copy))
         this.turn = player
         this.opp_turn = ai
         max_score = Math.max(eval_score, max_score)
-        alpha = Math.max(alpha, eval_score)
-        if (beta <= alpha) {
-          break
-        }
       }
     return max_score
 
     } else if (maximazing_player === false) {
       let min_score = Number.POSITIVE_INFINITY
       this.play_move(move, true)
-      this.turn = ai
-      this.opp_turn = player
-      let ai_moves = this.possible_moves()
-      let board_copy = [...this.holes_copy]
-      for (var j = 0; j < ai_moves.length; j += 1) {
-        let eval_score = this.minimax(ai_moves[j], depth-1, alpha, beta, true)
-        this.holes_copy = [...board_copy]
+      const ai_moves = this.possible_moves()
+      const board_copy = JSON.parse(JSON.stringify(this.holes_copy))
+      for (let j = 0; j < ai_moves.length; j += 1) {
+        let eval_score = this.minimax(ai_moves[j], depth-1, true)
+        this.holes_copy = JSON.parse(JSON.stringify(board_copy))
         this.turn = ai
         this.opp_turn = player
         min_score = Math.min(min_score, eval_score)
-        beta = Math.min(beta, eval_score)
-        if (beta <= alpha) {
-          break
-        }
       }
       return min_score
     }
   }
+
 
   get_move() {
     this.isTesting = true
     let best_score = Number.NEGATIVE_INFINITY
     let best_move = []
     let poss_moves = this.possible_moves()
-    let board_copy = [...this.holes_copy]
+    console.log("possible ai move: =========================}", poss_moves);
+    let board_copy = JSON.parse(JSON.stringify(this.holes_copy))
+    for (let i = 0; i < poss_moves.length; i += 1 ) {
+      let ai_score = this.minimax(poss_moves[i], 2, true)
+      this.holes_copy = JSON.parse(JSON.stringify(board_copy))
+      if (ai_score >= best_score) {
 
-    var count = 0
-
-    for (var i = 0; i < poss_moves.length; i += 1 ) {
-      let ai_score = this.minimax(poss_moves[i], 2, Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY, true)
-      this.holes_copy = [...board_copy]
-      if (ai_score > best_score) {
         best_move = poss_moves[i]
         best_score = ai_score
-      }
-
-      count += 1
-      console.log("count", count);
-      if (count === 1) {
-        break
+        console.log("ai_score----------->: ", ai_score, "best_score----------->: ", best_score);
       }
     }
     this.turn = ai
     this.opp_turn = player
-    this.isTesting = true
+    this.isTesting = false
     return best_move
-    // return poss_moves[Math.floor(Math.random() * poss_moves.length)]
   }
 
 
   make_move() {
-    // not returning optimal move
-    let ai_move = this.get_move()
-    this.play_move(ai_move, true)
+    if (this.turn === ai) {
+      console.log("^^^^^^^^^^^^^^^^^^^^^^^^^turn is ai: ", this.turn === ai);
+      // not returning optimal move
+
+      let ai_move = this.get_move()
+      console.log("ai's best move -------------------------------->", ai_move);
+      console.log("-------holes copy-------");
+      console.log(this.holes_copy);
+      console.log("+++++++++++holes state+++++++");
+      console.log(this.state.holes);
+      console.log(">>>>>>>>>>>>>>>>>>>>>>>>ai move: ", ai_move, this.turn);
+
+      this.play_move(ai_move, true)
+    }
   }
 
   play_move(moves, done) {
-    console.log("moves, done");
-    console.log(moves, done, this.turn);
     if (done) {
       for (let i = 0; i < moves.length; i += 1) {
         this.make_move_choice(moves[i])
       }
+
+      if (this.turn === ai && !(this.isTesting)) {
+        console.log("\n");
+        console.log("we are done: ", done);
+        console.log("************************************************************");
+        console.log("-------holes copy-------");
+        console.log(this.holes_copy);
+        console.log("+++++++++++holes state+++++++");
+        console.log(this.state.holes);
+        console.log("************************************************************");
+        console.log("\n");
+      }
+
       // if player is done making move, give turn to AI
       if (this.turn === player) {
         this.turn = ai
         this.opp_turn = player
         setTimeout(() => {
             this.make_move()
-            this.setState({ holes: this.holes_copy })
-          }, 3000);
-      }
-      console.log("reached the end of if", this.turn);
-      if (this.turn === ai) {
+            this.setState({
+              holes:JSON.parse(JSON.stringify(this.holes_copy))
+            })
+          }, 2000);
+      } else if (this.turn === ai){
         this.turn = player
         this.opp_turn = ai
       }
 
-    } else { // player have another turn
-      console.log("**************************");
-      console.log(moves);
+    } else { // player have another turn //3
       this.make_move_choice(moves)
     }
   }
 
 
   handleClick(move) {
+    console.log("*******************************************************>handling: ", move);
     let poss_moves = this.possible_moves()
+
     let done = false
     this.isTesting = false
     for (var i = 0; i < poss_moves.length; i += 1) {
@@ -398,10 +474,10 @@ class Board extends React.Component {
 
 
   is_over() {
-    for (var i = 0; i < players.length; i += 1) {
+    for (let i = 0; i < players.length; i += 1) {
       let has_marbles = false
-      for (var j = 0; j < holes[player].length; j += 1) {
-        if (this.holes_copy[holes[player][j]] !== 0) {
+      for (let j = 0; j < holes[players[i]].length; j += 1) {
+        if (this.holes_copy[holes[players[i]][j]] !== 0) {
           has_marbles = true
         }
       }
@@ -439,13 +515,24 @@ class Board extends React.Component {
       }
     }
 
-    this.setState({ holes: this.holes_copy, hand: this.hand_keeper })
+    this.setState({
+      holes: JSON.parse(JSON.stringify(this.holes_copy)),
+      hand: this.hand_keeper
+    })
 
   }
 
   scoop = (i) => {
     this.hand_keeper += this.holes_copy[i]
     this.holes_copy[i] = 0
+    // console.log("**************in scoop****************");
+    // console.log("this.state.holes");
+    // console.log(this.state.holes);
+    // console.log("holes_copy");
+    // console.log(this.holes_copy);
+    // console.log("**************in scoop****************");
+
+
   }
 
   drop = (i, count) => {
