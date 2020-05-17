@@ -6,11 +6,11 @@ If you are intersted in learning more about Minimax Algorithm, you can read more
 
 ## Prerequisites
   ### Install NodeJs
-        [How to install NodeJs](https://nodejs.org/en/download/package-manager/)
+        [How to install NodeJs](https://nodejs.org/en/download/package-manager)
 ## Clone Mancala on your local computer 
         git clone this repo
         go to Gebeta/gebeta 
         use the command 'yarn start' to start the project running
 ## Live version
-        [How to install NodeJs](https://rediet8abere.github.io/gebeta/)
+        [How to install NodeJs](https://rediet8abere.github.io/gebeta)
        
