@@ -4,6 +4,7 @@ Mancala is one of the oldest board games that is played between two players in a
 <br/>
 If you are intersted in learning more about Minimax Algorithm, you can read more [here](https://medium.com/@rediet.abere/minimax-algorithm-aa1457521fc7)
 
+
 ## Prerequisites
   ### Install NodeJs
         [How to install NodeJs](https://nodejs.org/en/download/package-manager)
