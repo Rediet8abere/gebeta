@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.css": "/gebeta/static/css/main.2556e5ae.chunk.css",
-    "main.js": "/gebeta/static/js/main.24926dc7.chunk.js",
-    "main.js.map": "/gebeta/static/js/main.24926dc7.chunk.js.map",
+    "main.css": "/gebeta/static/css/main.42b0a147.chunk.css",
+    "main.js": "/gebeta/static/js/main.b484fb51.chunk.js",
+    "main.js.map": "/gebeta/static/js/main.b484fb51.chunk.js.map",
     "runtime-main.js": "/gebeta/static/js/runtime-main.5d34c23a.js",
     "runtime-main.js.map": "/gebeta/static/js/runtime-main.5d34c23a.js.map",
     "static/js/2.e268bf54.chunk.js": "/gebeta/static/js/2.e268bf54.chunk.js",
     "static/js/2.e268bf54.chunk.js.map": "/gebeta/static/js/2.e268bf54.chunk.js.map",
     "index.html": "/gebeta/index.html",
-    "precache-manifest.e7f50203853ea3b9ac5b368713f8dcab.js": "/gebeta/precache-manifest.e7f50203853ea3b9ac5b368713f8dcab.js",
+    "precache-manifest.330128aa6dc984fefb214186a1567c7f.js": "/gebeta/precache-manifest.330128aa6dc984fefb214186a1567c7f.js",
     "service-worker.js": "/gebeta/service-worker.js",
-    "static/css/main.2556e5ae.chunk.css.map": "/gebeta/static/css/main.2556e5ae.chunk.css.map",
+    "static/css/main.42b0a147.chunk.css.map": "/gebeta/static/css/main.42b0a147.chunk.css.map",
     "static/js/2.e268bf54.chunk.js.LICENSE.txt": "/gebeta/static/js/2.e268bf54.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.5d34c23a.js",
     "static/js/2.e268bf54.chunk.js",
-    "static/css/main.2556e5ae.chunk.css",
-    "static/js/main.24926dc7.chunk.js"
+    "static/css/main.42b0a147.chunk.css",
+    "static/js/main.b484fb51.chunk.js"
   ]
 }
