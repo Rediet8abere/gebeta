@@ -5,7 +5,8 @@ import './App.css';
 function App() {
   return (
     <div className="App">
-      <img src={process.env.PUBLIC_URL + "/images/woodBackground.jpeg"} alt="mypic" width="100%" height="100%"/>
+      <img className="background_img" src={process.env.PUBLIC_URL + "/images/woodBackground.jpeg"} alt="mypic"/>
+      <img className="mancala_header" src={process.env.PUBLIC_URL + "/images/mancala_header.png"} alt="mancala_header"/>
       <Board />
     </div>
   );

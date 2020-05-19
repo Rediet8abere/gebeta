@@ -1,10 +1,11 @@
 
 .turn-keeper {
+  font-family: 'Bree Serif', serif;
   position: absolute;
-  top: 80px;
-  left: 178px;
+  top: 250px;
+  left: 78px;
   text-align: center;
-  font-size: 150%;
+  font-size: 350%;
 }
 
 .start-btn {
@@ -13,25 +14,22 @@
   padding: 15px 32px;
   color: white;
   position: absolute;
-  top: 80px;
-  left: 578px;
+  top: 150px;
+  left: 78px;
   font-size: large;
 }
 
 .bank {
   font-size: large;
   border-radius: 12px;
-}
-
-.hole {
-  font-size: large;
-  border-radius: 50%;
+  background-color: #00005c;
+  color: #f7f7f7;
 }
 
 .board-r1-r2 {
   position: absolute;
-  left: 578px;
-  top: 250px;
+  left: 575px;
+  top: 260px;
 }
 
 .board-row1 {
@@ -48,12 +46,12 @@
 
 .ai-bank {
   position: absolute;
-  left: 460px;
-  top: 250px;
+  left: 445px;
+  top: 275px;
 }
 
 .player-bank {
   position: absolute;
-  left: 880px;
-  top: 250px;
+  left: 1000px;
+  top: 275px;
 }

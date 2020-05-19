@@ -1,5 +1,6 @@
-import React from 'react';
+import React from 'react'
 import './Board.css'
+import Hole from './Hole'
 
 const player = 0
 const ai = 1
@@ -43,10 +44,7 @@ const h = {
 // do +1
 const all_holes = [...Array(15).keys()];
 
-const holeStyle = {
-  padding: "15px",
-  margin: "4px",
-};
+
 
 const bankStyle = {
   padding: "50px",
@@ -56,7 +54,7 @@ const bankStyle = {
 function Turn(props) {
   return (
     <div className="turn-keeper">
-      <h5>Turn keeper: {props.turn}</h5>
+      <h5>{props.turn} turn </h5>
     </div>
   );
 }
@@ -64,29 +62,12 @@ function Turn(props) {
 function Bank(props) {
   return (
     <div>
-      <h5>{props.index}</h5>
       <button style={bankStyle} className="bank">{props.marbles}</button>
     </div>
   );
 }
 
-function Hole(props) {
-  if (props.index <= 6) {
-    return (
-      <div>
-      <button style={holeStyle} className="hole" onClick={props.handleClick.bind(this, props.index)}>{props.marbles}</button>
-      <h5>{props.index}</h5>
-      </div>
-    );
-  } else if (6 < props.index < 14) {
-      return (
-        <div>
-        <h5>{props.index}</h5>
-        <button style={holeStyle} className="hole" onClick={props.handleClick.bind(this, props.index)}>{props.marbles}</button>
-        </div>
-      );
-    }
-}
+
 
 
 
@@ -116,9 +97,9 @@ class Board extends React.Component {
   renderTurn() {
     let turn_keeper = "User"
     if (this.turn === ai) {
-      turn_keeper = "AI"
+      turn_keeper = "AI's"
     } else {
-      turn_keeper = "User"
+      turn_keeper = "User's"
     }
     return (
       <Turn turn={turn_keeper} />
@@ -194,15 +175,6 @@ class Board extends React.Component {
   }
 
   possible_moves() {
-    // console.log("\n");
-    // console.log( (this.turn === player) ? "player's turn" : "ai's turn" );
-    // console.log("****************************");
-    // console.log("holes_copy");
-    // console.log(this.holes_copy);
-    // console.log("holes state");
-    // console.log(this.state.holes);
-    // console.log("*****************************");
-    // console.log("\n");
 
     let move_list = []
     let pmc = this.possible_moves_choice()
@@ -217,76 +189,30 @@ class Board extends React.Component {
   }
 
   make_move_choice(i) {
-    // console.log("hand_keeper before scoop should be 0: ", this.hand_keeper);
-    // console.log("cur_hole: ", i);
     this.scoop(i)
-    // console.log("-----------make move choice-----------------");
-    // console.log("this.state.holes");
-    // console.log(this.state.holes);
-    // console.log("holes_copy");
-    // console.log(this.holes_copy);
-    // console.log("-----------make move choice-----------------");
 
     let cur_hole = i
     let hand_count = this.hand_keeper
-    // console.log("hand_keeper after scoop should be 4: ", this.hand_keeper);
-    // let count = 0
-    // console.log("\n");
     for (let k = 0; k < hand_count; k += 1) {
       let next_hole = h[cur_hole]["next"][this.turn]
-      // console.log("next_hole and bank check");
-      // console.log(next_hole === banks[ai], "next_hole: ", next_hole, "banks[ai]", banks[ai]);
-      // console.log(this.turn === player ? "player's turn" : "ai's turn");
-      // if it's opponent's bank don't drop skip and drop on next hole
       if (this.turn === player && next_hole === banks[ai]) {
-        // console.log("prevents from dopping in opponent hole ai");
         next_hole = h[next_hole]["next"][this.turn]
-        // console.log("whats next to a bank", next_hole);
       } else if (this.turn === ai && next_hole === banks[player]) {
-        // console.log("prevents from dopping in opponent hole bank");
         next_hole = h[next_hole]["next"][this.turn]
       }
-      // console.log("next_hole", next_hole);
       this.drop(next_hole, 1)
       cur_hole = next_hole
-      // count += 1
     }
-    // console.log("\n");
-    // console.log("cur_hole should be : ", cur_hole, "count should be ", count);
-    //
-    //
-    // console.log("holes_copy");
-    // console.log(this.holes_copy);
-    // console.log("holes state");
-    // console.log(this.state.holes);
-    //
-    // console.log( (cur_hole !== banks[player] && cur_hole !== banks[ai]) ? "cur hole not bank" : "It's a bank" );
-    //
-    // console.log("this.holes_copy[cur_hole] ", this.holes_copy[cur_hole] );
-    // console.log("marbles in cur_hole === 1", this.holes_copy[cur_hole] === 1);
-    // console.log(this.turn=== player ? "player's turn" : "ai's turn");
 
     if (h[cur_hole]["owner"] === this.turn ) {
       if (this.holes_copy[cur_hole] === 1 && (cur_hole !== banks[player] && cur_hole !== banks[ai])) {
           if (h[cur_hole]["oop"] !== 0) {
-            // console.log("\n");
-            // console.log("))))))))))))))))))))) --- scooping");
-            // console.log("cur_hole: ", cur_hole, this.holes_copy[cur_hole]);
-            // console.log("opp holes: ", h[cur_hole]["oop"], this.holes_copy[h[cur_hole]["oop"]]);
-            // console.log("\n");
             this.scoop(cur_hole)
             this.scoop(h[cur_hole]["oop"])
             this.drop_all(banks[this.turn])
           }
         }
     }
-    // console.log("**************make_move_choice****************");
-    // console.log("this.state.holes");
-    // console.log(this.state.holes);
-    // console.log("holes_copy");
-    // console.log(this.holes_copy);
-    // console.log("**************make_move_choice****************");
-    // console.log("testing should be true if turn is ai", this.isTesting, this.turn === ai);
     if (!(this.isTesting)) {
       this.setState({
         holes: JSON.parse(JSON.stringify(this.holes_copy))
@@ -316,14 +242,10 @@ class Board extends React.Component {
           completed_list.push(move_list[i])
         }
         this.holes_copy = JSON.parse(JSON.stringify(board_copy))
-        // this.setState({ holes: this.holes_copy })
       } else {
         completed_list.push(move_list[i])
       }
     }
-    // if (this.turn === player) {
-    //   this.setState({ holes: this.holes_copy })
-    // }
   }
 
 
@@ -377,7 +299,6 @@ class Board extends React.Component {
     let best_score = Number.NEGATIVE_INFINITY
     let best_move = []
     let poss_moves = this.possible_moves()
-    console.log("possible ai move: =========================}", poss_moves);
     let board_copy = JSON.parse(JSON.stringify(this.holes_copy))
     for (let i = 0; i < poss_moves.length; i += 1 ) {
       let ai_score = this.minimax(poss_moves[i], 2, true)
@@ -386,7 +307,6 @@ class Board extends React.Component {
 
         best_move = poss_moves[i]
         best_score = ai_score
-        console.log("ai_score----------->: ", ai_score, "best_score----------->: ", best_score);
       }
     }
     this.turn = ai
@@ -398,17 +318,7 @@ class Board extends React.Component {
 
   make_move() {
     if (this.turn === ai) {
-      console.log("^^^^^^^^^^^^^^^^^^^^^^^^^turn is ai: ", this.turn === ai);
-      // not returning optimal move
-
       let ai_move = this.get_move()
-      console.log("ai's best move -------------------------------->", ai_move);
-      console.log("-------holes copy-------");
-      console.log(this.holes_copy);
-      console.log("+++++++++++holes state+++++++");
-      console.log(this.state.holes);
-      console.log(">>>>>>>>>>>>>>>>>>>>>>>>ai move: ", ai_move, this.turn);
-
       this.play_move(ai_move, true)
     }
   }
@@ -424,15 +334,6 @@ class Board extends React.Component {
       }
 
       if (this.turn === ai && !(this.isTesting)) {
-        console.log("\n");
-        console.log("we are done: ", done);
-        console.log("************************************************************");
-        console.log("-------holes copy-------");
-        console.log(this.holes_copy);
-        console.log("+++++++++++holes state+++++++");
-        console.log(this.state.holes);
-        console.log("************************************************************");
-        console.log("\n");
       }
 
       // if player is done making move, give turn to AI
@@ -457,7 +358,6 @@ class Board extends React.Component {
 
 
   handleClick(move) {
-    console.log("*******************************************************>handling: ", move);
     let poss_moves = this.possible_moves()
 
     let done = false
@@ -543,14 +443,6 @@ class Board extends React.Component {
   scoop = (i) => {
     this.hand_keeper += this.holes_copy[i]
     this.holes_copy[i] = 0
-    // console.log("**************in scoop****************");
-    // console.log("this.state.holes");
-    // console.log(this.state.holes);
-    // console.log("holes_copy");
-    // console.log(this.holes_copy);
-    // console.log("**************in scoop****************");
-
-
   }
 
   drop = (i, count) => {
