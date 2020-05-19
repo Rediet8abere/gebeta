@@ -414,6 +414,10 @@ class Board extends React.Component {
   }
 
   play_move(moves, done) {
+    if(this.is_over()) {
+      alert('GAME IS OVER!');
+    }
+
     if (done) {
       for (let i = 0; i < moves.length; i += 1) {
         this.make_move_choice(moves[i])
@@ -501,6 +505,20 @@ class Board extends React.Component {
     }
     return this.holes_copy[banks[this.turn]] - this.holes_copy[banks[this.opp_turn]]
   }
+
+
+  get_winner() {
+    let player_score = this.score(player)
+    let ai_score = this.score(ai)
+    if (player_score > ai_score) {
+      return "YOU WIN"
+    } else if (player_score < ai_score) {
+      return "YOU LOSE"
+    } else if (player_score === ai_score) {
+     return "IT'S A TIE"
+    }
+ }
+
 
   reset_board() {
     for (let k = 0; k < all_holes.length; k += 1) {

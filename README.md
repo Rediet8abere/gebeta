@@ -14,6 +14,6 @@ If you are intersted in learning more about Minimax Algorithm, you can read more
         2. go to Gebeta/gebeta
         3. use the command 'yarn start' to start the project running
 ## Live version
-        [How to install NodeJs](https://rediet8abere.github.io/gebeta)
+        [Mancala](https://rediet8abere.github.io/gebeta/)
 ## Acknowledgments
         This work is based on John Dupuy's YouTube tutoria [Mancala](https://www.youtube.com/watch?v=Y6P-_sTYQcM)
