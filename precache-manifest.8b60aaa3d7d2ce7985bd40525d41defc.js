@@ -1,11 +1,11 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "cad4034c8ce4b9f3f6c7e27e77afd379",
+    "revision": "9c7a6ad2e42f709cdfa6bf729da92b93",
     "url": "/gebeta/index.html"
   },
   {
-    "revision": "38ad3e1e0ec46bd41093",
-    "url": "/gebeta/static/css/main.42b0a147.chunk.css"
+    "revision": "78f17226cc33ca3478df",
+    "url": "/gebeta/static/css/main.beb73530.chunk.css"
   },
   {
     "revision": "dfa609383df1580aee48",
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/gebeta/static/js/2.e268bf54.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "38ad3e1e0ec46bd41093",
-    "url": "/gebeta/static/js/main.b484fb51.chunk.js"
+    "revision": "78f17226cc33ca3478df",
+    "url": "/gebeta/static/js/main.327182f0.chunk.js"
   },
   {
     "revision": "04b98051392b3c9b7193",
